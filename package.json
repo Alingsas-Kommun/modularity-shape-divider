@@ -1,6 +1,6 @@
 {
   "name": "modularity-svg-background",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Display SVG background images that can overflow to upper or lower modules.",
   "main": "",
   "repository": {

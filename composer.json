@@ -16,5 +16,6 @@
             "type": "vcs",
             "url": "https://github.com/alingsas-kommun/modularity-svg-background.git"
         }
-    ]
+    ],
+    "version": "0.1.0"
 }
