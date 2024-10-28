@@ -1,0 +1,20 @@
+{
+    "name": "alingsas-kommun/modularity-svg-background",
+    "description": "Display SVG background images that can overflow to upper or lower modules.",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Consid",
+            "email": "alingsaskommun@consid.se"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/alingsas-kommun/modularity-svg-background.git"
+        }
+    ]
+}
