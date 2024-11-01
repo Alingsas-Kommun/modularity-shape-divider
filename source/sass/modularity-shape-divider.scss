@@ -3,10 +3,13 @@
 
     &-wrapper {
         display: inline-flex;
-        left: 50%;
-        margin-left: -50vw;
+        margin-left: calc(calc(calc(-100vw - var(--scrollbar))/2) + 50% + var(--scrollbar));
         position: relative;
-        width: 100vw;
+        width: calc(100vw - var(--scrollbar));
+
+        @media screen and (min-width: 1248px) {
+            margin-left: calc(-50vw + calc(var(--container-width) / 2) - calc(var(--base, 8px)* 3) + calc(var(--scrollbar)/2));
+        }
 
         svg {
             width: 100%;
@@ -59,4 +62,8 @@
             transform: scale(-1, -1);
         }
     }
+}
+
+main {
+    &:has(.sidebar-right-sidebar) {}
 }

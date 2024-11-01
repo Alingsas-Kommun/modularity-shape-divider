@@ -238,14 +238,14 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "all"
+                "value": "mod-shape-divider"
             }
         ],
         [
             {
                 "param": "block",
                 "operator": "==",
-                "value": "all"
+                "value": "acf\/shape-divider"
             }
         ]
     ],

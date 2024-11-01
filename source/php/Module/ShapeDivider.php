@@ -5,10 +5,10 @@ namespace ModularityShapeDivider\Module;
 use ModularityShapeDivider\Helper\CacheBust;
 
 /**
- * Class SvgBackground
- * @package SvgBackground\Module
+ * Class ShapeDivider
+ * @package ShapeDivider\Module
  */
-class SvgBackground extends \Modularity\Module
+class ShapeDivider extends \Modularity\Module
 {
     public $slug = 'shape-divider';
 

@@ -241,14 +241,14 @@
             0 => array(
                 'param' => 'post_type',
                 'operator' => '==',
-                'value' => 'all',
+                'value' => 'mod-shape-divider',
             ),
         ),
         1 => array(
             0 => array(
                 'param' => 'block',
                 'operator' => '==',
-                'value' => 'all',
+                'value' => 'acf/shape-divider',
             ),
         ),
     ),

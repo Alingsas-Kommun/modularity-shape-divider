@@ -28,7 +28,7 @@ class App
         if (function_exists('modularity_register_module')) {
             modularity_register_module(
                 MODULARITY_SHAPE_DIVIDER_MODULE_PATH,
-                'SvgBackground'
+                'ShapeDivider'
             );
         }
     }
