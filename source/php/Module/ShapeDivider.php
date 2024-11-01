@@ -1,8 +1,8 @@
 <?php
 
-namespace ModularitySvgBackground\Module;
+namespace ModularityShapeDivider\Module;
 
-use ModularitySvgBackground\Helper\CacheBust;
+use ModularityShapeDivider\Helper\CacheBust;
 
 /**
  * Class SvgBackground
@@ -10,7 +10,7 @@ use ModularitySvgBackground\Helper\CacheBust;
  */
 class SvgBackground extends \Modularity\Module
 {
-    public $slug = 'svg-background';
+    public $slug = 'shape-divider';
 
     public $supports = array();
 
@@ -24,9 +24,9 @@ class SvgBackground extends \Modularity\Module
 
     public function init()
     {
-        $this->nameSingular = __("SVG-bakgrund", 'modularity-svg-background');
-        $this->namePlural = __("SVG-bakgrunder", 'modularity-svg-background');
-        $this->description = __("Display SVG background images that can overflow to upper or lower modules.", 'modularity-svg-background');
+        $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
+        $this->namePlural = __("Shape Divider", 'modularity-shape-divider');
+        $this->description = __("Display SVG background images that can overflow to upper or lower modules.", 'modularity-shape-divider');
     }
 
     /**
@@ -62,7 +62,7 @@ class SvgBackground extends \Modularity\Module
 
         if ($hasTruthyExtraSetting) {
             add_filter('Modularity/Display/BeforeModule::classes', function($classes, $args, $post_type, $current_ID) use ($data, $ID) {
-                if ($post_type === 'mod-svg-background' && $current_ID === $ID) {
+                if ($post_type === 'mod-shape-divider' && $current_ID === $ID) {
                     if ($data['noBottomMargin']) {
                         $classes[] = 'no-bottom-margin';
                     }
@@ -100,7 +100,7 @@ class SvgBackground extends \Modularity\Module
      */
     public function template(): string
     {
-        return "svg-background.blade.php";
+        return "shape-divider.blade.php";
     }
 
     /**
@@ -111,14 +111,14 @@ class SvgBackground extends \Modularity\Module
     {
         //Register custom css
         wp_register_style(
-            'modularity-svg-background',
-            MODULARITY_SVG_BACKGROUND_URL . '/dist/' . CacheBust::name('css/modularity-svg-background.css'),
+            'modularity-shape-divider',
+            MODULARITY_SHAPE_DIVIDER_URL . '/dist/' . CacheBust::name('css/modularity-shape-divider.css'),
             null,
             '1.0.0'
         );
 
         //Enqueue
-        wp_enqueue_style('modularity-svg-background');
+        wp_enqueue_style('modularity-shape-divider');
     }
 
     /**
@@ -129,14 +129,14 @@ class SvgBackground extends \Modularity\Module
     {
         //Register custom css
         wp_register_script(
-            'modularity-svg-background',
-            MODULARITY_SVG_BACKGROUND_URL . '/dist/' . CacheBust::name('js/modularity-svg-background.js'),
+            'modularity-shape-divider',
+            MODULARITY_SHAPE_DIVIDER_URL . '/dist/' . CacheBust::name('js/modularity-shape-divider.js'),
             null,
             '1.0.0'
         );
 
         //Enqueue
-        wp_enqueue_script('modularity-svg-background');
+        wp_enqueue_script('modularity-shape-divider');
     }
 
     /**

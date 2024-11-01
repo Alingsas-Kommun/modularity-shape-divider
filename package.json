@@ -1,18 +1,18 @@
 {
-  "name": "modularity-svg-background",
+  "name": "modularity-shape-divider",
   "version": "0.1.0",
   "description": "Display SVG background images that can overflow to upper or lower modules.",
   "main": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alingsas-kommun/modularity-svg-background"
+    "url": "https://github.com/alingsas-kommun/modularity-shape-divider"
   },
   "author": "Michael Claesson @ Consid",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alingsas-kommun/modularity-svg-background/issues"
+    "url": "https://github.com/alingsas-kommun/modularity-shape-divider/issues"
   },
-  "homepage": "https://github.com/alingsas-kommun/modularity-svg-background",
+  "homepage": "https://github.com/alingsas-kommun/modularity-shape-divider",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "cross-env NODE_ENV=development webpack --watch",

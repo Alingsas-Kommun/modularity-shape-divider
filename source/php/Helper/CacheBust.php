@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularitySvgBackground\Helper;
+namespace ModularityShapeDivider\Helper;
 
 class CacheBust
 {
@@ -27,15 +27,15 @@ class CacheBust
      */
     public static function getRevManifest()
     {
-        $jsonPath = MODULARITY_SVG_BACKGROUND_PATH . apply_filters(
-            'ModularitySvgBackground/Helper/CacheBust/RevManifestPath',
+        $jsonPath = MODULARITY_SHAPE_DIVIDER_PATH . apply_filters(
+            'ModularityShapeDivider/Helper/CacheBust/RevManifestPath',
             'dist/manifest.json'
         );
 
         if (file_exists($jsonPath)) {
             return json_decode(file_get_contents($jsonPath), true);
         } elseif (WP_DEBUG) {
-            echo '<div style="color:red">Error: Assets not built. Go to ' . MODULARITY_SVG_BACKGROUND_PATH . ' and run gulp. See ' . MODULARITY_SVG_BACKGROUND_PATH . 'README.md for more info.</div>';
+            echo '<div style="color:red">Error: Assets not built. Go to ' . MODULARITY_SHAPE_DIVIDER_PATH . ' and run gulp. See ' . MODULARITY_SHAPE_DIVIDER_PATH . 'README.md for more info.</div>';
         }
     }
 }

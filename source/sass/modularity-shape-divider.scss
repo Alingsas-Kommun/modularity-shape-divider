@@ -1,4 +1,4 @@
-.modularity-mod-svg-background {
+.modularity-mod-shape-divider {
     line-height: 0;
 
     &-wrapper {
@@ -24,38 +24,38 @@
     &.no-height {
         height: 0;
 
-        .modularity-mod-svg-background-wrapper {
+        .modularity-mod-shape-divider-wrapper {
             position: absolute;
             z-index: -1;
         }
     }
 
     &.no-height.overlap-up {
-        .modularity-mod-svg-background-wrapper {
+        .modularity-mod-shape-divider-wrapper {
             bottom: calc(calc(var(--grid-gap)*2)*-1);
         }
     }
 
     &.no-height.overlap-down {
-        .modularity-mod-svg-background-wrapper {
+        .modularity-mod-shape-divider-wrapper {
             top: 0;
         }
     }
 
     &.flip-vertically:not(.flip-horizontally) {
-        .modularity-mod-svg-background-wrapper {
+        .modularity-mod-shape-divider-wrapper {
             transform: scale(1, -1);
         }
     }
 
     &.flip-horizontally:not(.flip-vertically) {
-        .modularity-mod-svg-background-wrapper {
+        .modularity-mod-shape-divider-wrapper {
             transform: scale(-1, 1);
         }
     }
 
     &.flip-vertically.flip-horizontally {
-        .modularity-mod-svg-background-wrapper {
+        .modularity-mod-shape-divider-wrapper {
             transform: scale(-1, -1);
         }
     }

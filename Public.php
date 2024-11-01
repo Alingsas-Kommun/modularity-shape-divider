@@ -2,11 +2,11 @@
 
 use ComponentLibrary\Init as ComponentLibraryInit;
 
-if (!function_exists('svg_background_render_blade_view')) {
-    function svg_background_render_blade_view($view, $data = [], $compress = true)
+if (!function_exists('shape_divider_render_blade_view')) {
+    function shape_divider_render_blade_view($view, $data = [], $compress = true)
     {
         $init = new ComponentLibraryInit([
-            MODULARITY_SVG_BACKGROUND_MODULE_VIEW_PATH
+            MODULARITY_SHAPE_DIVIDER_MODULE_VIEW_PATH
         ]);
 
         $bladeEngine = $init->getEngine();

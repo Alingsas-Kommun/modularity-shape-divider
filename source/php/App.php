@@ -1,8 +1,8 @@
 <?php
 
-namespace ModularitySvgBackground;
+namespace ModularityShapeDivider;
 
-use ModularitySvgBackground\Helper\CacheBust;
+use ModularityShapeDivider\Helper\CacheBust;
 
 class App
 {
@@ -27,7 +27,7 @@ class App
     {
         if (function_exists('modularity_register_module')) {
             modularity_register_module(
-                MODULARITY_SVG_BACKGROUND_MODULE_PATH,
+                MODULARITY_SHAPE_DIVIDER_MODULE_PATH,
                 'SvgBackground'
             );
         }
@@ -42,10 +42,10 @@ class App
     {
         // If child theme is active, insert plugin view path after child views path.
         if (is_child_theme()) {
-            array_splice($array, 2, 0, array(MODULARITY_SVG_BACKGROUND_VIEW_PATH));
+            array_splice($array, 2, 0, array(MODULARITY_SHAPE_DIVIDER_VIEW_PATH));
         } else {
             // Add view path first in the list if child theme is not active.
-            array_unshift($array, MODULARITY_SVG_BACKGROUND_VIEW_PATH);
+            array_unshift($array, MODULARITY_SHAPE_DIVIDER_VIEW_PATH);
         }
 
         return $array;

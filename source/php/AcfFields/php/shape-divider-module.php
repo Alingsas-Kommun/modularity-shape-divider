@@ -3,11 +3,11 @@
 if (function_exists('acf_add_local_field_group')) {
     acf_add_local_field_group(array(
     'key' => 'group_671a36a4089c2',
-    'title' => __('SVG-bakgrund', 'modularity-svg-background'),
+    'title' => __('SVG-bakgrund', 'modularity-shape-divider'),
     'fields' => array(
         0 => array(
             'key' => 'field_671a3e3dc3c9b',
-            'label' => __('Innehåll', 'modularity-svg-background'),
+            'label' => __('Innehåll', 'modularity-shape-divider'),
             'name' => '',
             'aria-label' => '',
             'type' => 'tab',
@@ -24,7 +24,7 @@
         ),
         1 => array(
             'key' => 'field_671a36a4c8b78',
-            'label' => __('SVG-fil', 'modularity-svg-background'),
+            'label' => __('SVG-fil', 'modularity-shape-divider'),
             'name' => 'svg_file',
             'aria-label' => '',
             'type' => 'image',
@@ -51,7 +51,7 @@
         ),
         2 => array(
             'key' => 'field_671a3a28da7d3',
-            'label' => __('Färg', 'modularity-svg-background'),
+            'label' => __('Färg', 'modularity-shape-divider'),
             'name' => 'color',
             'aria-label' => '',
             'type' => 'select',
@@ -64,13 +64,13 @@
                 'id' => '',
             ),
             'choices' => array(
-                'none' => __('Ingen', 'modularity-svg-background'),
-                'primary' => __('Primärfärg', 'modularity-svg-background'),
-                'primary-light' => __('Primärfärg (ljus)', 'modularity-svg-background'),
-                'primary-dark' => __('Primärfärg (mörk)', 'modularity-svg-background'),
-                'secondary' => __('Sekundärfärg', 'modularity-svg-background'),
-                'secondary-light' => __('Sekundärfärg (ljus)', 'modularity-svg-background'),
-                'secondary-dark' => __('Sekundärfärg (mörk)', 'modularity-svg-background'),
+                'none' => __('Ingen', 'modularity-shape-divider'),
+                'primary' => __('Primärfärg', 'modularity-shape-divider'),
+                'primary-light' => __('Primärfärg (ljus)', 'modularity-shape-divider'),
+                'primary-dark' => __('Primärfärg (mörk)', 'modularity-shape-divider'),
+                'secondary' => __('Sekundärfärg', 'modularity-shape-divider'),
+                'secondary-light' => __('Sekundärfärg (ljus)', 'modularity-shape-divider'),
+                'secondary-dark' => __('Sekundärfärg (mörk)', 'modularity-shape-divider'),
             ),
             'default_value' => false,
             'return_format' => 'value',
@@ -84,7 +84,7 @@
         ),
         3 => array(
             'key' => 'field_671a3e47c3c9c',
-            'label' => __('Extrainställningar', 'modularity-svg-background'),
+            'label' => __('Extrainställningar', 'modularity-shape-divider'),
             'name' => '',
             'aria-label' => '',
             'type' => 'tab',
@@ -101,7 +101,7 @@
         ),
         4 => array(
             'key' => 'field_671a3dfde182c',
-            'label' => __('Ingen marginall upptill', 'modularity-svg-background'),
+            'label' => __('Ingen marginall upptill', 'modularity-shape-divider'),
             'name' => 'no_top_margin',
             'aria-label' => '',
             'type' => 'true_false',
@@ -121,7 +121,7 @@
         ),
         5 => array(
             'key' => 'field_671a3e12e182d',
-            'label' => __('Ingen marginall nedtill', 'modularity-svg-background'),
+            'label' => __('Ingen marginall nedtill', 'modularity-shape-divider'),
             'name' => 'no_bottom_margin',
             'aria-label' => '',
             'type' => 'true_false',
@@ -141,7 +141,7 @@
         ),
         6 => array(
             'key' => 'field_671b5e8b9a5b9',
-            'label' => __('Vänd upp och ned', 'modularity-svg-background'),
+            'label' => __('Vänd upp och ned', 'modularity-shape-divider'),
             'name' => 'flip_vertically',
             'aria-label' => '',
             'type' => 'true_false',
@@ -161,7 +161,7 @@
         ),
         7 => array(
             'key' => 'field_671b65ff90cc2',
-            'label' => __('Spegelvänd', 'modularity-svg-background'),
+            'label' => __('Spegelvänd', 'modularity-shape-divider'),
             'name' => 'flip_horizontally',
             'aria-label' => '',
             'type' => 'true_false',
@@ -181,7 +181,7 @@
         ),
         8 => array(
             'key' => 'field_671a3e5fc3c9d',
-            'label' => __('Bygg ingen höjd', 'modularity-svg-background'),
+            'label' => __('Bygg ingen höjd', 'modularity-shape-divider'),
             'name' => 'no_height',
             'aria-label' => '',
             'type' => 'true_false',
@@ -201,7 +201,7 @@
         ),
         9 => array(
             'key' => 'field_671b71ca893c2',
-            'label' => __('Överlappning', 'modularity-svg-background'),
+            'label' => __('Överlappning', 'modularity-shape-divider'),
             'name' => 'overlap',
             'aria-label' => '',
             'type' => 'select',
@@ -222,10 +222,10 @@
                 'id' => '',
             ),
             'choices' => array(
-                'up' => __('Uppåt', 'modularity-svg-background'),
-                'down' => __('Nedåt', 'modularity-svg-background'),
+                'up' => __('Uppåt', 'modularity-shape-divider'),
+                'down' => __('Nedåt', 'modularity-shape-divider'),
             ),
-            'default_value' => __('down', 'modularity-svg-background'),
+            'default_value' => __('down', 'modularity-shape-divider'),
             'return_format' => 'value',
             'multiple' => 0,
             'allow_null' => 0,
@@ -241,14 +241,14 @@
             0 => array(
                 'param' => 'post_type',
                 'operator' => '==',
-                'value' => 'mod-svg-background',
+                'value' => 'all',
             ),
         ),
         1 => array(
             0 => array(
                 'param' => 'block',
                 'operator' => '==',
-                'value' => 'acf/svg-background',
+                'value' => 'all',
             ),
         ),
     ),

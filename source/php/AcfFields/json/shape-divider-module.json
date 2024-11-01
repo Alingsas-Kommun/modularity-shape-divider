@@ -238,14 +238,14 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "mod-svg-background"
+                "value": "all"
             }
         ],
         [
             {
                 "param": "block",
                 "operator": "==",
-                "value": "acf\/svg-background"
+                "value": "all"
             }
         ]
     ],
