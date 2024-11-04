@@ -1,16 +1,15 @@
 <?php
 
-namespace ModularitySvgBackground\Module;
+namespace ModularityShapeDivider\Module;
 
-use ModularitySvgBackground\Helper\CacheBust;
+use ModularityShapeDivider\Helper\CacheBust;
 
 /**
- * Class SvgBackground
- * @package SvgBackground\Module
+ * Class ShapeDivider
+ * @package ShapeDivider\Module
  */
-class SvgBackground extends \Modularity\Module
-{
-    public $slug = 'svg-background';
+class ShapeDivider extends \Modularity\Module {
+    public $slug = 'shape-divider';
 
     public $supports = array();
 
@@ -22,47 +21,56 @@ class SvgBackground extends \Modularity\Module
         'flipHorizontally',
     ];
 
-    public function init()
-    {
-        $this->nameSingular = __("SVG-bakgrund", 'modularity-svg-background');
-        $this->namePlural = __("SVG-bakgrunder", 'modularity-svg-background');
-        $this->description = __("Display SVG background images that can overflow to upper or lower modules.", 'modularity-svg-background');
+    public function init() {
+        $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
+        $this->namePlural = __("Shape Divider", 'modularity-shape-divider');
+        $this->description = __("Display SVG background images that can overflow to upper or lower modules.", 'modularity-shape-divider');
     }
 
     /**
      * Data array
      * @return array $data
      */
-    public function data(): array
-    {
+    public function data(): array {
         $data = array();
+
+        $baseClass = "modularity-{$this->post_type}";
 
         //Append field config
         $data = array_merge($data, (array) \Modularity\Helper\FormatObject::camelCase(
             get_fields($this->ID)
         ));
 
+        // Get SVG code
         $svg_path = get_attached_file($data['svgFile']);
         $svg_code = file_get_contents($svg_path);
 
-        $data['svgCode'] = $svg_code;
+        // Change embedded color
+        if ($data['replaceSvgColors']) {
+            if ($data['color'] === 'custom') {
+                $svg_code = $this->replaceSvgColors($svg_code, $data['customColor']);
+            } else {
+                $svg_code = $this->replaceSvgColors($svg_code, 'currentColor');
+            }
+        }
 
-        $baseClass = "modularity-{$this->post_type}";
-
+        // View data
         $data['instanceClass'] = $baseClass . '-' . $this->ID;
         $data['baseClass'] = $baseClass;
+        $data['svgCode'] = $svg_code;
 
+        // Unique vars
+        $ID = $this->ID;
         $classes = [$baseClass . '-wrapper'];
 
+        // Determine if extra classes per instance need to be set
         $hasTruthyExtraSetting = !empty(array_filter(
             array_intersect_key($data, array_flip(self::EXTRA_SETTINGS))
         ));
 
-        $ID = $this->ID;
-
         if ($hasTruthyExtraSetting) {
-            add_filter('Modularity/Display/BeforeModule::classes', function($classes, $args, $post_type, $current_ID) use ($data, $ID) {
-                if ($post_type === 'mod-svg-background' && $current_ID === $ID) {
+            add_filter('Modularity/Display/BeforeModule::classes', function ($classes, $args, $post_type, $current_ID) use ($data, $ID) {
+                if ($post_type === 'mod-shape-divider' && $current_ID === $ID) {
                     if ($data['noBottomMargin']) {
                         $classes[] = 'no-bottom-margin';
                     }
@@ -98,45 +106,51 @@ class SvgBackground extends \Modularity\Module
      * Blade Template
      * @return string
      */
-    public function template(): string
-    {
-        return "svg-background.blade.php";
+    public function template(): string {
+        return "shape-divider.blade.php";
     }
 
     /**
      * Style - Register & adding css
      * @return void
      */
-    public function style()
-    {
+    public function style() {
         //Register custom css
         wp_register_style(
-            'modularity-svg-background',
-            MODULARITY_SVG_BACKGROUND_URL . '/dist/' . CacheBust::name('css/modularity-svg-background.css'),
+            'modularity-shape-divider',
+            MODULARITY_SHAPE_DIVIDER_URL . '/dist/' . CacheBust::name('css/modularity-shape-divider.css'),
             null,
             '1.0.0'
         );
 
         //Enqueue
-        wp_enqueue_style('modularity-svg-background');
+        wp_enqueue_style('modularity-shape-divider');
     }
 
     /**
      * Script - Register & adding scripts
      * @return void
      */
-    public function script()
-    {
+    public function script() {
         //Register custom css
         wp_register_script(
-            'modularity-svg-background',
-            MODULARITY_SVG_BACKGROUND_URL . '/dist/' . CacheBust::name('js/modularity-svg-background.js'),
+            'modularity-shape-divider',
+            MODULARITY_SHAPE_DIVIDER_URL . '/dist/' . CacheBust::name('js/modularity-shape-divider.js'),
             null,
             '1.0.0'
         );
 
         //Enqueue
-        wp_enqueue_script('modularity-svg-background');
+        wp_enqueue_script('modularity-shape-divider');
+    }
+
+    private function replaceSvgColors($svg, $color) {
+        $pattern = '/\b(color|fill|stroke)\s*=\s*"[#\w\d\s\(\),.]+"/i';
+        $replacement = '$1="' . $color . '"';
+
+        $svg = preg_replace($pattern, $replacement, $svg);
+
+        return $svg;
     }
 
     /**

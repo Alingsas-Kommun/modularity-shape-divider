@@ -1,11 +1,11 @@
 <?php
 
-namespace ModularitySvgBackground\Admin;
+namespace ModularityShapeDivider\Admin;
 
 class Settings
 {
     public function __construct() {
-        add_action('acf/init', array($this, 'registerSettings'));
+        //add_action('acf/init', array($this, 'registerSettings'));
     }
 
     /**
@@ -14,14 +14,14 @@ class Settings
      */
     public function registerSettings()
     {
-        if (function_exists('acf_add_options_sub_page')) {
+        /* if (function_exists('acf_add_options_sub_page')) {
             acf_add_options_sub_page(array(
-                'page_title'  => __("Modularity SVG background", 'modularity-svg-background'),
-                'menu_title'  => __("Modularity SVG background Settings", 'modularity-svg-background'),
-                'menu_slug'   => 'modularity-svg-background-settings',
+                'page_title'  => __("Modularity Shape Divider", 'modularity-shape-divider'),
+                'menu_title'  => __("Modularity Shape Divider Settings", 'modularity-shape-divider'),
+                'menu_slug'   => 'modularity-shape-divider-settings',
                 'parent_slug' => 'options-general.php',
                 'capability'  => 'manage_options'
             ));
-        }
+        } */
     }
 }

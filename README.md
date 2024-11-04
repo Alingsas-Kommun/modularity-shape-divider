@@ -13,18 +13,18 @@ parent: Boilerplates
 [![Issues][issues-shield]][issues-url]
 [![License][license-shield]][license-url] -->
 
-<h3>Modularity SVG background</h3>
+<h3>Modularity Shape Divider</h3>
 <p>
   Display SVG background images that can overflow to upper or lower modules.
   <br />
-  <a href="https://github.com/alingsas-kommun/modularity-svg-background/issues">Report Bug</a>
+  <a href="https://github.com/alingsas-kommun/modularity-shape-divider/issues">Report Bug</a>
   ·
-  <a href="https://github.com/alingsas-kommun/modularity-svg-background/issues">Request Feature</a>
+  <a href="https://github.com/alingsas-kommun/modularity-shape-divider/issues">Request Feature</a>
 </p>
 
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
-- [About Modularity SVG background](#about-modularity-svg-background)
+- [About Modularity Shape Divider](#about-modularity-shape-divider)
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -36,9 +36,9 @@ parent: Boilerplates
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
-## About Modularity SVG background
+## About Modularity Shape Divider
 
-[![Modularity SVG background Screen Shot][product-screenshot]](https://example.com)
+[![Modularity Shape Divider Screen Shot][product-screenshot]](https://example.com)
 
 Here's a blank template to get started:
 
@@ -72,7 +72,7 @@ composer require helsingborg-stad/modularity
 
 1. Clone the repo
 ```sh
-git clone https://github.com/alingsas-kommun/modularity-svg-background.git
+git clone https://github.com/alingsas-kommun/modularity-shape-divider.git
 ```
 2. Install and build NPM packages
 ```sh
@@ -118,14 +118,14 @@ Distributed under the [MIT License][license-url].
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/alingsas-kommun/modularity-svg-background.svg?style=flat-square
-[contributors-url]: https://github.com/alingsas-kommun/modularity-svg-background/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/alingsas-kommun/modularity-svg-background.svg?style=flat-square
-[forks-url]: https://github.com/alingsas-kommun/modularity-svg-background/network/members
-[stars-shield]: https://img.shields.io/github/stars/alingsas-kommun/modularity-svg-background.svg?style=flat-square
-[stars-url]: https://github.com/alingsas-kommun/modularity-svg-background/stargazers
-[issues-shield]: https://img.shields.io/github/issues/alingsas-kommun/modularity-svg-background.svg?style=flat-square
-[issues-url]: https://github.com/alingsas-kommun/modularity-svg-background/issues
-[license-shield]: https://img.shields.io/github/license/alingsas-kommun/modularity-svg-background.svg?style=flat-square
-[license-url]: https://raw.githubusercontent.com/alingsas-kommun/modularity-svg-background/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/alingsas-kommun/modularity-shape-divider.svg?style=flat-square
+[contributors-url]: https://github.com/alingsas-kommun/modularity-shape-divider/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/alingsas-kommun/modularity-shape-divider.svg?style=flat-square
+[forks-url]: https://github.com/alingsas-kommun/modularity-shape-divider/network/members
+[stars-shield]: https://img.shields.io/github/stars/alingsas-kommun/modularity-shape-divider.svg?style=flat-square
+[stars-url]: https://github.com/alingsas-kommun/modularity-shape-divider/stargazers
+[issues-shield]: https://img.shields.io/github/issues/alingsas-kommun/modularity-shape-divider.svg?style=flat-square
+[issues-url]: https://github.com/alingsas-kommun/modularity-shape-divider/issues
+[license-shield]: https://img.shields.io/github/license/alingsas-kommun/modularity-shape-divider.svg?style=flat-square
+[license-url]: https://raw.githubusercontent.com/alingsas-kommun/modularity-shape-divider/master/LICENSE
 [product-screenshot]: images/screenshot.png

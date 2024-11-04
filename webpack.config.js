@@ -16,8 +16,8 @@ module.exports = {
      * Add your entry files here
      */
     entry: {
-        'css/modularity-svg-background':               './source/sass/modularity-svg-background.scss',
-        'js/modularity-svg-background':                './source/js/modularity-svg-background.js',
+        'css/modularity-shape-divider':               './source/sass/modularity-shape-divider.scss',
+        'js/modularity-shape-divider':                './source/js/modularity-shape-divider.js',
     },
     
     /**

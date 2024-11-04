@@ -1,5 +1,5 @@
 {
-    "name": "alingsas-kommun/modularity-svg-background",
+    "name": "alingsas-kommun/modularity-shape-divider",
     "description": "Display SVG background images that can overflow to upper or lower modules.",
     "type": "wordpress-plugin",
     "license": "MIT",
@@ -14,7 +14,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/alingsas-kommun/modularity-svg-background.git"
+            "url": "https://github.com/alingsas-kommun/modularity-shape-divider.git"
         }
     ],
     "version": "0.1.0"

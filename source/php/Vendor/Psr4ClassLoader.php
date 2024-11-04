@@ -1,6 +1,6 @@
 <?php
 
-namespace ModularitySvgBackground\Vendor;
+namespace ModularityShapeDivider\Vendor;
 
 /**
  * A PSR-4 compatible class loader.
