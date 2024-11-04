@@ -4,7 +4,7 @@
  * Plugin Name:       Modularity Shape Divider
  * Plugin URI:        https://github.com/alingsas-kommun/modularity-shape-divider
  * Description:       Display SVG background images that can overflow to upper or lower modules.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Author:            Consid
  * Author URI:        https://github.com/alingsas-kommun/
  * License:           MIT
