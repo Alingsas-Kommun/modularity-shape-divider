@@ -8,8 +8,7 @@ use ModularityShapeDivider\Helper\CacheBust;
  * Class ShapeDivider
  * @package ShapeDivider\Module
  */
-class ShapeDivider extends \Modularity\Module
-{
+class ShapeDivider extends \Modularity\Module {
     public $slug = 'shape-divider';
 
     public $supports = array();
@@ -22,8 +21,7 @@ class ShapeDivider extends \Modularity\Module
         'flipHorizontally',
     ];
 
-    public function init()
-    {
+    public function init() {
         $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
         $this->namePlural = __("Shape Divider", 'modularity-shape-divider');
         $this->description = __("Display SVG background images that can overflow to upper or lower modules.", 'modularity-shape-divider');
@@ -33,35 +31,45 @@ class ShapeDivider extends \Modularity\Module
      * Data array
      * @return array $data
      */
-    public function data(): array
-    {
+    public function data(): array {
         $data = array();
+
+        $baseClass = "modularity-{$this->post_type}";
 
         //Append field config
         $data = array_merge($data, (array) \Modularity\Helper\FormatObject::camelCase(
             get_fields($this->ID)
         ));
 
+        // Get SVG code
         $svg_path = get_attached_file($data['svgFile']);
         $svg_code = file_get_contents($svg_path);
 
-        $data['svgCode'] = $svg_code;
+        // Change embedded color
+        if ($data['replaceSvgColors']) {
+            if ($data['color'] === 'custom') {
+                $svg_code = $this->replaceSvgColors($svg_code, $data['customColor']);
+            } else {
+                $svg_code = $this->replaceSvgColors($svg_code, 'currentColor');
+            }
+        }
 
-        $baseClass = "modularity-{$this->post_type}";
-
+        // View data
         $data['instanceClass'] = $baseClass . '-' . $this->ID;
         $data['baseClass'] = $baseClass;
+        $data['svgCode'] = $svg_code;
 
+        // Unique vars
+        $ID = $this->ID;
         $classes = [$baseClass . '-wrapper'];
 
+        // Determine if extra classes per instance need to be set
         $hasTruthyExtraSetting = !empty(array_filter(
             array_intersect_key($data, array_flip(self::EXTRA_SETTINGS))
         ));
 
-        $ID = $this->ID;
-
         if ($hasTruthyExtraSetting) {
-            add_filter('Modularity/Display/BeforeModule::classes', function($classes, $args, $post_type, $current_ID) use ($data, $ID) {
+            add_filter('Modularity/Display/BeforeModule::classes', function ($classes, $args, $post_type, $current_ID) use ($data, $ID) {
                 if ($post_type === 'mod-shape-divider' && $current_ID === $ID) {
                     if ($data['noBottomMargin']) {
                         $classes[] = 'no-bottom-margin';
@@ -98,8 +106,7 @@ class ShapeDivider extends \Modularity\Module
      * Blade Template
      * @return string
      */
-    public function template(): string
-    {
+    public function template(): string {
         return "shape-divider.blade.php";
     }
 
@@ -107,8 +114,7 @@ class ShapeDivider extends \Modularity\Module
      * Style - Register & adding css
      * @return void
      */
-    public function style()
-    {
+    public function style() {
         //Register custom css
         wp_register_style(
             'modularity-shape-divider',
@@ -125,8 +131,7 @@ class ShapeDivider extends \Modularity\Module
      * Script - Register & adding scripts
      * @return void
      */
-    public function script()
-    {
+    public function script() {
         //Register custom css
         wp_register_script(
             'modularity-shape-divider',
@@ -137,6 +142,15 @@ class ShapeDivider extends \Modularity\Module
 
         //Enqueue
         wp_enqueue_script('modularity-shape-divider');
+    }
+
+    private function replaceSvgColors($svg, $color) {
+        $pattern = '/\b(color|fill|stroke)\s*=\s*"[#\w\d\s\(\),.]+"/i';
+        $replacement = '$1="' . $color . '"';
+
+        $svg = preg_replace($pattern, $replacement, $svg);
+
+        return $svg;
     }
 
     /**

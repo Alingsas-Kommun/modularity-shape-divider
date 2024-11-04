@@ -3,11 +3,11 @@
 if (function_exists('acf_add_local_field_group')) {
     acf_add_local_field_group(array(
     'key' => 'group_671a36a4089c2',
-    'title' => __('SVG-bakgrund', 'modularity-shape-divider'),
+    'title' => __('Shape Divider', 'modularity-shape-divider'),
     'fields' => array(
         0 => array(
             'key' => 'field_671a3e3dc3c9b',
-            'label' => __('Innehåll', 'modularity-shape-divider'),
+            'label' => __('Content', 'modularity-shape-divider'),
             'name' => '',
             'aria-label' => '',
             'type' => 'tab',
@@ -24,7 +24,7 @@
         ),
         1 => array(
             'key' => 'field_671a36a4c8b78',
-            'label' => __('SVG-fil', 'modularity-shape-divider'),
+            'label' => __('SVG file', 'modularity-shape-divider'),
             'name' => 'svg_file',
             'aria-label' => '',
             'type' => 'image',
@@ -51,7 +51,7 @@
         ),
         2 => array(
             'key' => 'field_671a3a28da7d3',
-            'label' => __('Färg', 'modularity-shape-divider'),
+            'label' => __('Color', 'modularity-shape-divider'),
             'name' => 'color',
             'aria-label' => '',
             'type' => 'select',
@@ -64,27 +64,74 @@
                 'id' => '',
             ),
             'choices' => array(
-                'none' => __('Ingen', 'modularity-shape-divider'),
-                'primary' => __('Primärfärg', 'modularity-shape-divider'),
-                'primary-light' => __('Primärfärg (ljus)', 'modularity-shape-divider'),
-                'primary-dark' => __('Primärfärg (mörk)', 'modularity-shape-divider'),
-                'secondary' => __('Sekundärfärg', 'modularity-shape-divider'),
-                'secondary-light' => __('Sekundärfärg (ljus)', 'modularity-shape-divider'),
-                'secondary-dark' => __('Sekundärfärg (mörk)', 'modularity-shape-divider'),
+                'none' => __('Standard', 'modularity-shape-divider'),
+                'primary' => __('Primary color', 'modularity-shape-divider'),
+                'primary-light' => __('Primary color (light)', 'modularity-shape-divider'),
+                'primary-dark' => __('Primary color (dark)', 'modularity-shape-divider'),
+                'secondary' => __('Secondary color', 'modularity-shape-divider'),
+                'secondary-light' => __('Secondary color (light)', 'modularity-shape-divider'),
+                'secondary-dark' => __('Secondary color (dark)', 'modularity-shape-divider'),
+                'custom' => __('Custom', 'modularity-shape-divider'),
             ),
-            'default_value' => false,
+            'default_value' => __('none', 'modularity-shape-divider'),
             'return_format' => 'value',
             'multiple' => 0,
-            'allow_custom' => 0,
-            'placeholder' => '',
-            'search_placeholder' => '',
             'allow_null' => 0,
             'ui' => 0,
             'ajax' => 0,
+            'placeholder' => '',
+            'allow_custom' => 0,
+            'search_placeholder' => '',
         ),
         3 => array(
+            'key' => 'field_6728d9600eff3',
+            'label' => __('Custom color', 'modularity-shape-divider'),
+            'name' => 'custom_color',
+            'aria-label' => '',
+            'type' => 'color_picker',
+            'instructions' => '',
+            'required' => 0,
+            'conditional_logic' => array(
+                0 => array(
+                    0 => array(
+                        'field' => 'field_671a3a28da7d3',
+                        'operator' => '==',
+                        'value' => 'custom',
+                    ),
+                ),
+            ),
+            'wrapper' => array(
+                'width' => '',
+                'class' => '',
+                'id' => '',
+            ),
+            'default_value' => '',
+            'enable_opacity' => 0,
+            'return_format' => 'string',
+        ),
+        4 => array(
+            'key' => 'field_6728d919ff5ad',
+            'label' => __('Replace embedded colors', 'modularity-shape-divider'),
+            'name' => 'replace_svg_colors',
+            'aria-label' => '',
+            'type' => 'true_false',
+            'instructions' => '',
+            'required' => 0,
+            'conditional_logic' => 0,
+            'wrapper' => array(
+                'width' => '',
+                'class' => '',
+                'id' => '',
+            ),
+            'message' => __('Yes', 'modularity-shape-divider'),
+            'default_value' => 0,
+            'ui' => 0,
+            'ui_on_text' => '',
+            'ui_off_text' => '',
+        ),
+        5 => array(
             'key' => 'field_671a3e47c3c9c',
-            'label' => __('Extrainställningar', 'modularity-shape-divider'),
+            'label' => __('Extra settings', 'modularity-shape-divider'),
             'name' => '',
             'aria-label' => '',
             'type' => 'tab',
@@ -99,9 +146,9 @@
             'placement' => 'top',
             'endpoint' => 0,
         ),
-        4 => array(
+        6 => array(
             'key' => 'field_671a3dfde182c',
-            'label' => __('Ingen marginall upptill', 'modularity-shape-divider'),
+            'label' => __('No top margin', 'modularity-shape-divider'),
             'name' => 'no_top_margin',
             'aria-label' => '',
             'type' => 'true_false',
@@ -119,9 +166,9 @@
             'ui_on_text' => '',
             'ui_off_text' => '',
         ),
-        5 => array(
+        7 => array(
             'key' => 'field_671a3e12e182d',
-            'label' => __('Ingen marginall nedtill', 'modularity-shape-divider'),
+            'label' => __('No bottom margin', 'modularity-shape-divider'),
             'name' => 'no_bottom_margin',
             'aria-label' => '',
             'type' => 'true_false',
@@ -139,9 +186,9 @@
             'ui_on_text' => '',
             'ui_off_text' => '',
         ),
-        6 => array(
+        8 => array(
             'key' => 'field_671b5e8b9a5b9',
-            'label' => __('Vänd upp och ned', 'modularity-shape-divider'),
+            'label' => __('Flip upside down', 'modularity-shape-divider'),
             'name' => 'flip_vertically',
             'aria-label' => '',
             'type' => 'true_false',
@@ -159,9 +206,9 @@
             'ui_on_text' => '',
             'ui_off_text' => '',
         ),
-        7 => array(
+        9 => array(
             'key' => 'field_671b65ff90cc2',
-            'label' => __('Spegelvänd', 'modularity-shape-divider'),
+            'label' => __('Mirror', 'modularity-shape-divider'),
             'name' => 'flip_horizontally',
             'aria-label' => '',
             'type' => 'true_false',
@@ -179,9 +226,9 @@
             'ui_on_text' => '',
             'ui_off_text' => '',
         ),
-        8 => array(
+        10 => array(
             'key' => 'field_671a3e5fc3c9d',
-            'label' => __('Bygg ingen höjd', 'modularity-shape-divider'),
+            'label' => __('No height', 'modularity-shape-divider'),
             'name' => 'no_height',
             'aria-label' => '',
             'type' => 'true_false',
@@ -199,9 +246,9 @@
             'ui_on_text' => '',
             'ui_off_text' => '',
         ),
-        9 => array(
+        11 => array(
             'key' => 'field_671b71ca893c2',
-            'label' => __('Överlappning', 'modularity-shape-divider'),
+            'label' => __('Overlap', 'modularity-shape-divider'),
             'name' => 'overlap',
             'aria-label' => '',
             'type' => 'select',
@@ -222,8 +269,8 @@
                 'id' => '',
             ),
             'choices' => array(
-                'up' => __('Uppåt', 'modularity-shape-divider'),
-                'down' => __('Nedåt', 'modularity-shape-divider'),
+                'up' => __('Up', 'modularity-shape-divider'),
+                'down' => __('Down', 'modularity-shape-divider'),
             ),
             'default_value' => __('down', 'modularity-shape-divider'),
             'return_format' => 'value',

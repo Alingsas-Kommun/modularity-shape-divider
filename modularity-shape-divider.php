@@ -9,7 +9,7 @@
  * Author URI:        https://github.com/alingsas-kommun/
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
- * Text Domain:       mod-shape-divider
+ * Text Domain:       modularity-shape-divider
  * Domain Path:       /languages
  */
 
