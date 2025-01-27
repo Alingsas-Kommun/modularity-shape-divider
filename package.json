@@ -1,6 +1,6 @@
 {
   "name": "modularity-shape-divider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Display SVG background images that can overflow to upper or lower modules.",
   "main": "",
   "repository": {

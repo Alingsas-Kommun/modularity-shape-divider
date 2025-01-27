@@ -17,6 +17,19 @@ class App
 
         // Add view paths
         add_filter('Municipio/blade/view_paths', array($this, 'addViewPaths'), 1, 1);
+
+        // Add aria-hidden
+        add_filter('Modularity/Display/BeforeModule', function($beforeModule, $args, $post_type, $ID) {
+            if ($post_type === 'mod-shape-divider') {
+                $beforeModule = str_replace('>', ' aria-hidden="true">', $beforeModule);
+            }
+
+            return $beforeModule;
+        }, 10, 4);
+        add_filter('Modularity/Display/mod-shape-divider/Markup', function($markup, $module) {
+            //var_dump($module);
+            return $markup;
+        }, 10, 2);
     }
 
     /**
