@@ -6,38 +6,27 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScripts = require('webpack-remove-empty-scripts');
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const {getIfUtils, removeEmpty} = require('webpack-config-utils');
-const { ifProduction } = getIfUtils(process.env.NODE_ENV);
+
+const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
-    mode: ifProduction('production', 'development'),
+    mode: isProd ? 'production' : 'development',
 
-    /**
-     * Add your entry files here
-     */
     entry: {
-        'css/modularity-shape-divider':               './source/sass/modularity-shape-divider.scss',
-        'js/modularity-shape-divider':                './source/js/modularity-shape-divider.js',
+        'css/modularity-shape-divider': './source/sass/modularity-shape-divider.scss',
+        'js/modularity-shape-divider': './source/js/modularity-shape-divider.js',
     },
-    
-    /**
-     * Output settings
-     */
+
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '',
     },
-    /**
-     * Define external dependencies here
-     */
-    externals: {
-    },
+
+    externals: {},
+
     module: {
         rules: [
-            /**
-             * Styles
-             */
             {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
@@ -45,58 +34,35 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
-                            importLoaders: 3, // 0 => no loaders (default); 1 => postcss-loader; 2 => sass-loader
+                            importLoaders: 3,
                         },
                     },
                     {
                         loader: 'postcss-loader',
                         options: {
                             postcssOptions: {
-                                plugins: [ autoprefixer ],
-                            }
-                        }
+                                plugins: [autoprefixer],
+                            },
+                        },
                     },
                     {
                         loader: 'sass-loader',
                         options: {}
-                    },
-                    'import-glob-loader'
+                    }
                 ],
             },
         ],
     },
-    plugins: removeEmpty([
-        /**
-         * Fix CSS entry chunks generating js file
-         */
-         new RemoveEmptyScripts(),
 
-        /**
-         * Clean dist folder
-         */
+    plugins: [
+        new RemoveEmptyScripts(),
         new CleanWebpackPlugin(),
-        /**
-         * Output CSS files
-         */
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css'
         }),
-
-        /**
-         * Output manifest.json for cache busting
-         */
         new WebpackManifestPlugin({
-            // Filter manifest items
-            filter: function (file) {
-                // Don't include source maps
-                if (file.path.match(/\.(map)$/)) {
-                    return false;
-                }
-                return true;
-            },
-            // Custom mapping of manifest item goes here
-            map: function (file) {
-                // Fix incorrect key for fonts
+            filter: file => !file.path.match(/\.(map)$/),
+            map: file => {
                 if (
                     file.isAsset &&
                     file.isModuleAsset &&
@@ -104,37 +70,26 @@ module.exports = {
                 ) {
                     const pathParts = file.path.split('.');
                     const nameParts = file.name.split('.');
-
-                    // Compare extensions
                     if (pathParts[pathParts.length - 1] !== nameParts[nameParts.length - 1]) {
-                        file.name = pathParts[0].concat('.', pathParts[pathParts.length - 1]);
+                        file.name = `${pathParts[0]}.${pathParts[pathParts.length - 1]}`;
                     }
                 }
-                
                 return file;
-            },
+            }
         }),
-
-        /**
-         * Enable build OS notifications (when using watch command)
-         */
-        new WebpackNotifierPlugin({alwaysNotify: true, skipFirstNotification: true}),
-
-        /**
-         * Minimize CSS assets
-         */
-        ifProduction(new CssMinimizerWebpackPlugin({
+        new WebpackNotifierPlugin({ alwaysNotify: true, skipFirstNotification: true }),
+        isProd && new CssMinimizerWebpackPlugin({
             minimizerOptions: {
                 preset: [
-                    "default",
+                    'default',
                     {
                         discardComments: { removeAll: true },
                     },
                 ],
             },
-        }))
+        })
+    ].filter(Boolean),
 
-    ]).filter(Boolean),
     devtool: 'source-map',
     stats: { children: false }
 };
