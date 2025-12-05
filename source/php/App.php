@@ -13,7 +13,7 @@ class App
         new Admin\Settings();
 
         //Register module
-        add_action('plugins_loaded', array($this, 'registerModule'));
+        add_action('init', array($this, 'registerModule'));
 
         // Add view paths
         add_filter('Municipio/blade/view_paths', array($this, 'addViewPaths'), 1, 1);
