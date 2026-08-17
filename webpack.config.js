@@ -1,6 +1,5 @@
 const path = require('path');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScripts = require('webpack-remove-empty-scripts');
@@ -77,7 +76,6 @@ module.exports = {
                 return file;
             }
         }),
-        new WebpackNotifierPlugin({ alwaysNotify: true, skipFirstNotification: true }),
         isProd && new CssMinimizerWebpackPlugin({
             minimizerOptions: {
                 preset: [
