@@ -3,25 +3,34 @@
 
     &-wrapper {
         display: inline-flex;
-        margin-left: calc(calc(calc(-100vw - var(--scrollbar))/2) + 50% + var(--scrollbar));
+        margin-left: calc((-100vw - var(--scrollbar, 0px)) / 2 + 50% + var(--scrollbar, 0px));
         position: relative;
-        width: calc(100vw - var(--scrollbar));
+        width: calc(100vw - var(--scrollbar, 0px));
 
         @media screen and (min-width: 1248px) {
-            margin-left: calc(-50vw + calc(var(--container-width) / 2) - calc(var(--base, 8px)* 3) + calc(var(--scrollbar)/2));
+            margin-left: calc(-50vw + var(--container-width, 1200px) / 2 - var(--base, 8px) * 3 + var(--scrollbar, 0px) / 2);
         }
 
         svg {
+            display: block;
             width: 100%;
+            height: auto;
+            max-width: none;
+            pointer-events: none;
+        }
+
+        &.is-using-current-color svg,
+        &.is-using-current-color svg [fill] {
+            fill: currentColor;
         }
     }
 
     &.no-bottom-margin {
-        margin-bottom: calc(var(--grid-gap) * -1);
+        margin-bottom: calc(var(--grid-gap, 2rem) * -1);
     }
 
     &.no-top-margin {
-        margin-top: calc(var(--grid-gap) * -1);
+        margin-top: calc(var(--grid-gap, 2rem) * -1);
     }
 
     &.no-height {
@@ -35,7 +44,7 @@
 
     &.no-height.overlap-up {
         .modularity-mod-shape-divider-wrapper {
-            bottom: calc(calc(var(--grid-gap)*2)*-1);
+            bottom: calc(var(--grid-gap, 2rem) * -2);
         }
     }
 
@@ -62,8 +71,4 @@
             transform: scale(-1, -1);
         }
     }
-}
-
-main {
-    &:has(.sidebar-right-sidebar) {}
 }

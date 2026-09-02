@@ -1,10 +1,3 @@
-<div class="{{ $classes }}">
+<div class="{{ $classes }}" @if (!empty($cssColor)) style="color: {{ $cssColor }};" @endif>
     {!! $svgCode !!}
 </div>
-@if ($color !== 'none')
-    <style>
-        .{{ $instanceClass }} {
-            color: var(--color-{{ $color }});
-        }
-    </style>
-@endif
