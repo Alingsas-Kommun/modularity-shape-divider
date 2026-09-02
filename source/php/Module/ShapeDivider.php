@@ -38,11 +38,6 @@ class ShapeDivider extends \Modularity\Module {
      */
     private static $registeredLayoutFilters = [];
 
-    /**
-     * @var array<int, string>
-     */
-    private static $svgMarkupCache = [];
-
     public function init() {
         $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
         $this->namePlural = __("Shape Divider", 'modularity-shape-divider');
@@ -65,7 +60,8 @@ class ShapeDivider extends \Modularity\Module {
         $color = $data['color'] ?? 'none';
         $customColor = $data['customColor'] ?? '';
         $replaceSvgColors = !empty($data['replaceSvgColors']);
-        $svgCode = $this->getSvgMarkup($data['svgFile'] ?? null);
+        $svgPath = get_attached_file($data['svgFile'] ?? 0);
+        $svgCode = ($svgPath && is_string($svgPath)) ? (string) file_get_contents($svgPath) : '';
 
         if ($replaceSvgColors && $svgCode !== '') {
             if ($color === 'custom') {
@@ -130,52 +126,6 @@ class ShapeDivider extends \Modularity\Module {
         );
 
         wp_enqueue_script('modularity-shape-divider');
-    }
-
-    /**
-     * Read inline SVG markup from a local attachment file, or fetch it by URL.
-     *
-     * @param mixed $attachmentId Attachment ID from the module field.
-     * @return string
-     */
-    private function getSvgMarkup($attachmentId): string {
-        $attachmentId = (int) $attachmentId;
-        if ($attachmentId <= 0) {
-            return '';
-        }
-
-        if (isset(self::$svgMarkupCache[$attachmentId])) {
-            return self::$svgMarkupCache[$attachmentId];
-        }
-
-        $path = get_attached_file($attachmentId);
-        if (is_string($path) && $path !== '' && is_readable($path)) {
-            $contents = file_get_contents($path);
-            $markup = is_string($contents) ? $contents : '';
-            self::$svgMarkupCache[$attachmentId] = $markup;
-            return $markup;
-        }
-
-        $url = wp_get_attachment_url($attachmentId);
-        if (!is_string($url) || $url === '') {
-            self::$svgMarkupCache[$attachmentId] = '';
-            return '';
-        }
-
-        $response = wp_remote_get($url, [
-            'timeout' => 15,
-        ]);
-
-        if (is_wp_error($response) || (int) wp_remote_retrieve_response_code($response) !== 200) {
-            self::$svgMarkupCache[$attachmentId] = '';
-            return '';
-        }
-
-        $body = wp_remote_retrieve_body($response);
-        $markup = is_string($body) ? $body : '';
-        self::$svgMarkupCache[$attachmentId] = $markup;
-
-        return $markup;
     }
 
     /**
