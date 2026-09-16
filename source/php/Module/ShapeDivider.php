@@ -41,9 +41,7 @@ class ShapeDivider extends \Modularity\Module {
             get_fields($this->ID)
         ));
 
-        // Get SVG code
-        $svg_path = get_attached_file($data['svgFile']);
-        $svg_code = file_get_contents($svg_path);
+        $svg_code = $this->getSvgCode($data['svgFile'] ?? null);
 
         // Change embedded color
         if ($data['replaceSvgColors']) {
@@ -142,6 +140,54 @@ class ShapeDivider extends \Modularity\Module {
 
         //Enqueue
         wp_enqueue_script('modularity-shape-divider');
+    }
+
+    /**
+     * Load SVG markup from the attachment file on disk.
+     *
+     * @param mixed $attachmentId ACF svg_file attachment ID.
+     * @return string
+     */
+    private function getSvgCode($attachmentId): string
+    {
+        if (empty($attachmentId)) {
+            return '';
+        }
+
+        $svgPath = get_attached_file($attachmentId);
+        if (is_string($svgPath) && is_readable($svgPath)) {
+            $svgCode = file_get_contents($svgPath);
+            return is_string($svgCode) ? $svgCode : '';
+        }
+
+        return $this->getSvgCodeFromRemoteFallback($attachmentId);
+    }
+
+    /**
+     * TEMPORARY local-dev fallback: fetch SVG via attachment URL when the file is missing on disk.
+     * Remove this method and its call in getSvgCode() when local uploads are available.
+     *
+     * @param mixed $attachmentId ACF svg_file attachment ID.
+     * @return string
+     */
+    private function getSvgCodeFromRemoteFallback($attachmentId): string
+    {
+        $url = wp_get_attachment_url($attachmentId);
+        if (!$url) {
+            return '';
+        }
+
+        $response = wp_remote_get($url);
+        if (is_wp_error($response)) {
+            return '';
+        }
+
+        if ((int) wp_remote_retrieve_response_code($response) !== 200) {
+            return '';
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        return is_string($body) ? $body : '';
     }
 
     private function replaceSvgColors($svg, $color) {
