@@ -13,14 +13,6 @@ class ShapeDivider extends \Modularity\Module {
 
     public $supports = array();
 
-    private const EXTRA_SETTINGS = [
-        'noTopMargin',
-        'noBottomMargin',
-        'noHeight',
-        'flipVertically',
-        'flipHorizontally',
-    ];
-
     public function init() {
         $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
         $this->namePlural = __("Shape Divider", 'modularity-shape-divider');
@@ -32,70 +24,47 @@ class ShapeDivider extends \Modularity\Module {
      * @return array $data
      */
     public function data(): array {
-        $data = array();
+        $data = (array) \Modularity\Helper\FormatObject::camelCase(
+            $this->getFields()
+        );
 
-        $baseClass = "modularity-{$this->post_type}";
-
-        //Append field config
-        $data = array_merge($data, (array) \Modularity\Helper\FormatObject::camelCase(
-            get_fields($this->ID)
-        ));
-
+        // Gutenberg blocks have no WP_Post, so $this->post_type is null.
+        $baseClass = 'modularity-mod-' . $this->slug;
         $svg_code = $this->getSvgCode($data['svgFile'] ?? null);
 
-        // Change embedded color
-        if ($data['replaceSvgColors']) {
-            if ($data['color'] === 'custom') {
-                $svg_code = $this->replaceSvgColors($svg_code, $data['customColor']);
-            } else {
-                $svg_code = $this->replaceSvgColors($svg_code, 'currentColor');
-            }
+        if (!empty($data['replaceSvgColors'])) {
+            $color = ($data['color'] ?? '') === 'custom'
+                ? ($data['customColor'] ?? 'currentColor')
+                : 'currentColor';
+            $svg_code = $this->replaceSvgColors($svg_code, $color);
         }
 
-        // View data
-        $data['instanceClass'] = $baseClass . '-' . $this->ID;
-        $data['baseClass'] = $baseClass;
-        $data['svgCode'] = $svg_code;
+        $instanceId = $this->ID ?: uniqid('block-');
+        $extraClasses = $this->getExtraClasses($data);
 
-        // Unique vars
-        $ID = $this->ID;
-        $classes = [$baseClass . '-wrapper'];
-
-        // Determine if extra classes per instance need to be set
-        $hasTruthyExtraSetting = !empty(array_filter(
-            array_intersect_key($data, array_flip(self::EXTRA_SETTINGS))
-        ));
-
-        if ($hasTruthyExtraSetting) {
-            add_filter('Modularity/Display/BeforeModule::classes', function ($classes, $args, $post_type, $current_ID) use ($data, $ID) {
-                if ($post_type === 'mod-shape-divider' && $current_ID === $ID) {
-                    if ($data['noBottomMargin']) {
-                        $classes[] = 'no-bottom-margin';
-                    }
-
-                    if ($data['noTopMargin']) {
-                        $classes[] = 'no-top-margin';
-                    }
-
-                    if ($data['noHeight']) {
-                        $classes[] = 'no-height';
-                        $classes[] = $data['overlap'] === 'up' ? 'overlap-up' : 'overlap-down';
-                    }
-
-                    if ($data['flipHorizontally']) {
-                        $classes[] = 'flip-horizontally';
-                    }
-
-                    if ($data['flipVertically']) {
-                        $classes[] = 'flip-vertically';
-                    }
+        if ($this->mode === 'module' && $extraClasses !== []) {
+            $ID = $this->ID;
+            add_filter('Modularity/Display/BeforeModule::classes', function ($classes, $args, $post_type, $current_ID) use ($extraClasses, $ID) {
+                if ($post_type !== 'mod-shape-divider') {
+                    return $classes;
                 }
 
-                return $classes;
+                if ($current_ID !== $ID) {
+                    return $classes;
+                }
+
+                return array_merge($classes, $extraClasses);
             }, 10, 4);
         }
 
-        $data['classes'] = implode(' ', $classes);
+        $data['instanceClass'] = $baseClass . '-' . $instanceId;
+        $data['baseClass'] = $baseClass;
+        $data['svgCode'] = $svg_code;
+        $data['color'] = $data['color'] ?? 'none';
+        $data['classes'] = implode(' ', array_merge(
+            [$baseClass . '-wrapper', $data['instanceClass']],
+            $extraClasses
+        ));
 
         return $data;
     }
@@ -140,6 +109,39 @@ class ShapeDivider extends \Modularity\Module {
 
         //Enqueue
         wp_enqueue_script('modularity-shape-divider');
+    }
+
+    /**
+     * Modifier classes from extra settings.
+     *
+     * @param array $data
+     * @return string[]
+     */
+    private function getExtraClasses(array $data): array {
+        $classes = [];
+
+        if (!empty($data['noBottomMargin'])) {
+            $classes[] = 'no-bottom-margin';
+        }
+
+        if (!empty($data['noTopMargin'])) {
+            $classes[] = 'no-top-margin';
+        }
+
+        if (!empty($data['noHeight'])) {
+            $classes[] = 'no-height';
+            $classes[] = ($data['overlap'] ?? '') === 'up' ? 'overlap-up' : 'overlap-down';
+        }
+
+        if (!empty($data['flipHorizontally'])) {
+            $classes[] = 'flip-horizontally';
+        }
+
+        if (!empty($data['flipVertically'])) {
+            $classes[] = 'flip-vertically';
+        }
+
+        return $classes;
     }
 
     /**
