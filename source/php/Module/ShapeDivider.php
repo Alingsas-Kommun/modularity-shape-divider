@@ -14,6 +14,18 @@ class ShapeDivider extends \Modularity\Module
 
     public $supports = array();
 
+    /**
+     * Palette slugs used before the Styleguide v3 token rename.
+     */
+    private const PALETTE_COLORS = [
+        'primary',
+        'primary-light',
+        'primary-dark',
+        'secondary',
+        'secondary-light',
+        'secondary-dark',
+    ];
+
     public function init()
     {
         $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
@@ -42,8 +54,14 @@ class ShapeDivider extends \Modularity\Module
             $svg_code = $this->replaceSvgColors($svg_code, $color);
         }
 
+        $colorChoice = $data['color'] ?? 'none';
+        $customColor = $data['customColor'] ?? '';
         $instanceId = $this->ID ?: uniqid('block-');
         $extraClasses = $this->getExtraClasses($data);
+
+        if (!empty($data['replaceSvgColors']) && $colorChoice !== 'custom' && $colorChoice !== 'none') {
+            $extraClasses[] = 'is-using-current-color';
+        }
 
         if ($this->mode === 'module' && $extraClasses !== []) {
             $ID = $this->ID;
@@ -63,7 +81,8 @@ class ShapeDivider extends \Modularity\Module
         $data['instanceClass'] = $baseClass . '-' . $instanceId;
         $data['baseClass'] = $baseClass;
         $data['svgCode'] = $svg_code;
-        $data['color'] = $data['color'] ?? 'none';
+        $data['color'] = $colorChoice;
+        $data['cssColor'] = $this->getCssColorValue($colorChoice, $customColor);
         $data['classes'] = implode(' ', array_merge(
             [$baseClass . '-wrapper', $data['instanceClass']],
             $extraClasses
@@ -111,6 +130,31 @@ class ShapeDivider extends \Modularity\Module
         );
 
         wp_enqueue_script('modularity-shape-divider');
+    }
+
+    /**
+     * Palette colors keep the previous --color-* variables.
+     * Gutenberg drops a style element into the WordPress layer, so the wrapper needs an inline color for currentColor.
+     *
+     * @param string $color ACF color choice.
+     * @param string $customColor Hex when $color is custom.
+     * @return string
+     */
+    private function getCssColorValue(string $color, string $customColor): string
+    {
+        if ($color === '' || $color === 'none') {
+            return '';
+        }
+
+        if ($color === 'custom') {
+            return $customColor;
+        }
+
+        if (!in_array($color, self::PALETTE_COLORS, true)) {
+            return '';
+        }
+
+        return 'var(--color-' . $color . ')';
     }
 
     /**
