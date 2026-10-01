@@ -8,37 +8,14 @@ use ModularityShapeDivider\Helper\CacheBust;
  * Class ShapeDivider
  * @package ShapeDivider\Module
  */
-class ShapeDivider extends \Modularity\Module {
+class ShapeDivider extends \Modularity\Module
+{
     public $slug = 'shape-divider';
 
     public $supports = array();
 
-    private const EXTRA_SETTINGS = [
-        'noTopMargin',
-        'noBottomMargin',
-        'noHeight',
-        'flipVertically',
-        'flipHorizontally',
-    ];
-
-    /**
-     * Prefer legacy Municipio 6 names when still defined, then Styleguide v3 tokens.
-     */
-    private const COLOR_TOKENS = [
-        'primary' => ['--color--primary', '--color-primary'],
-        'primary-light' => ['--color-primary-light', '--color--surface', '--color--primary-alt', '--color--primary'],
-        'primary-dark' => ['--color-primary-dark', '--color--primary-border', '--color--primary'],
-        'secondary' => ['--color--secondary', '--color-secondary'],
-        'secondary-light' => ['--color-secondary-light', '--color--secondary'],
-        'secondary-dark' => ['--color-secondary-dark', '--color--secondary-border', '--color--secondary'],
-    ];
-
-    /**
-     * @var array<int, bool>
-     */
-    private static $registeredLayoutFilters = [];
-
-    public function init() {
+    public function init()
+    {
         $this->nameSingular = __("Shape Divider", 'modularity-shape-divider');
         $this->namePlural = __("Shape Divider", 'modularity-shape-divider');
         $this->description = __("Display SVG background images that can overflow to upper or lower modules.", 'modularity-shape-divider');
@@ -48,44 +25,49 @@ class ShapeDivider extends \Modularity\Module {
      * Data array
      * @return array $data
      */
-    public function data(): array {
-        $data = array();
+    public function data(): array
+    {
+        $data = (array) \Modularity\Helper\FormatObject::camelCase(
+            $this->getFields()
+        );
 
-        $baseClass = "modularity-{$this->post_type}";
+        // Gutenberg blocks have no WP_Post, so $this->post_type is null.
+        $baseClass = 'modularity-mod-' . $this->slug;
+        $svg_code = $this->getSvgCode($data['svgFile'] ?? null);
 
-        $data = array_merge($data, (array) \Modularity\Helper\FormatObject::camelCase(
-            get_fields($this->ID)
-        ));
-
-        $color = $data['color'] ?? 'none';
-        $customColor = $data['customColor'] ?? '';
-        $replaceSvgColors = !empty($data['replaceSvgColors']);
-        $svgPath = get_attached_file($data['svgFile'] ?? 0);
-        $svgCode = ($svgPath && is_string($svgPath)) ? (string) file_get_contents($svgPath) : '';
-
-        if ($replaceSvgColors && $svgCode !== '') {
-            if ($color === 'custom') {
-                $svgCode = $this->replaceSvgColors($svgCode, $customColor);
-            } else {
-                $svgCode = $this->replaceSvgColors($svgCode, 'currentColor');
-            }
+        if (!empty($data['replaceSvgColors'])) {
+            $color = ($data['color'] ?? '') === 'custom'
+                ? ($data['customColor'] ?? 'currentColor')
+                : 'currentColor';
+            $svg_code = $this->replaceSvgColors($svg_code, $color);
         }
 
-        $data['instanceClass'] = $baseClass . '-' . $this->ID;
+        $instanceId = $this->ID ?: uniqid('block-');
+        $extraClasses = $this->getExtraClasses($data);
+
+        if ($this->mode === 'module' && $extraClasses !== []) {
+            $ID = $this->ID;
+            add_filter('Modularity/Display/BeforeModule::classes', function ($classes, $args, $post_type, $current_ID) use ($extraClasses, $ID) {
+                if ($post_type !== 'mod-shape-divider') {
+                    return $classes;
+                }
+
+                if ($current_ID !== $ID) {
+                    return $classes;
+                }
+
+                return array_merge($classes, $extraClasses);
+            }, 10, 4);
+        }
+
+        $data['instanceClass'] = $baseClass . '-' . $instanceId;
         $data['baseClass'] = $baseClass;
-        $data['svgCode'] = $svgCode;
-        $data['cssColor'] = $this->getCssColorValue($color, $customColor);
-        $data['color'] = $color;
-
-        $classes = [$baseClass . '-wrapper'];
-
-        if ($replaceSvgColors && $color !== 'custom' && $color !== 'none') {
-            $classes[] = 'is-using-current-color';
-        }
-
-        $this->registerLayoutClasses($data);
-
-        $data['classes'] = implode(' ', $classes);
+        $data['svgCode'] = $svg_code;
+        $data['color'] = $data['color'] ?? 'none';
+        $data['classes'] = implode(' ', array_merge(
+            [$baseClass . '-wrapper', $data['instanceClass']],
+            $extraClasses
+        ));
 
         return $data;
     }
@@ -94,7 +76,8 @@ class ShapeDivider extends \Modularity\Module {
      * Blade Template
      * @return string
      */
-    public function template(): string {
+    public function template(): string
+    {
         return "shape-divider.blade.php";
     }
 
@@ -102,7 +85,8 @@ class ShapeDivider extends \Modularity\Module {
      * Style - Register & adding css
      * @return void
      */
-    public function style() {
+    public function style()
+    {
         wp_register_style(
             'modularity-shape-divider',
             MODULARITY_SHAPE_DIVIDER_URL . '/dist/' . CacheBust::name('css/modularity-shape-divider.css'),
@@ -117,7 +101,8 @@ class ShapeDivider extends \Modularity\Module {
      * Script - Register & adding scripts
      * @return void
      */
-    public function script() {
+    public function script()
+    {
         wp_register_script(
             'modularity-shape-divider',
             MODULARITY_SHAPE_DIVIDER_URL . '/dist/' . CacheBust::name('js/modularity-shape-divider.js'),
@@ -129,91 +114,89 @@ class ShapeDivider extends \Modularity\Module {
     }
 
     /**
-     * Resolve a palette or custom color for `currentColor` on the SVG.
+     * Modifier classes from extra settings.
      *
-     * @param string $color ACF color choice.
-     * @param string $customColor Hex value when $color is custom.
+     * @param array $data
+     * @return string[]
+     */
+    private function getExtraClasses(array $data): array
+    {
+        $classes = [];
+
+        if (!empty($data['noBottomMargin'])) {
+            $classes[] = 'no-bottom-margin';
+        }
+
+        if (!empty($data['noTopMargin'])) {
+            $classes[] = 'no-top-margin';
+        }
+
+        if (!empty($data['noHeight'])) {
+            $classes[] = 'no-height';
+            $classes[] = ($data['overlap'] ?? '') === 'up' ? 'overlap-up' : 'overlap-down';
+        }
+
+        if (!empty($data['flipHorizontally'])) {
+            $classes[] = 'flip-horizontally';
+        }
+
+        if (!empty($data['flipVertically'])) {
+            $classes[] = 'flip-vertically';
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Load SVG markup from the attachment file on disk.
+     *
+     * @param mixed $attachmentId ACF svg_file attachment ID.
      * @return string
      */
-    private function getCssColorValue(string $color, string $customColor): string {
-        if ($color === 'none' || $color === '') {
+    private function getSvgCode($attachmentId): string
+    {
+        if (empty($attachmentId)) {
             return '';
         }
 
-        if ($color === 'custom') {
-            return $customColor;
+        $svgPath = get_attached_file($attachmentId);
+        if (is_string($svgPath) && is_readable($svgPath)) {
+            $svgCode = file_get_contents($svgPath);
+            return is_string($svgCode) ? $svgCode : '';
         }
 
-        $tokens = self::COLOR_TOKENS[$color] ?? ['--color--' . $color, '--color-' . $color];
-        $css = 'var(' . $tokens[0];
-
-        for ($i = 1, $count = count($tokens); $i < $count; $i++) {
-            $css .= ', var(' . $tokens[$i];
-        }
-
-        $css .= str_repeat(')', count($tokens));
-
-        return $css;
+        return $this->getSvgCodeFromRemoteFallback($attachmentId);
     }
 
     /**
-     * Attach layout modifier classes to the module wrapper once per instance.
+     * TEMPORARY local-dev fallback: fetch SVG via attachment URL when the file is missing on disk.
+     * Remove this method and its call in getSvgCode() when local uploads are available.
      *
-     * @param array $data Module view data.
-     * @return void
-     */
-    private function registerLayoutClasses(array $data): void {
-        $hasTruthyExtraSetting = !empty(array_filter(
-            array_intersect_key($data, array_flip(self::EXTRA_SETTINGS))
-        ));
-
-        if (!$hasTruthyExtraSetting) {
-            return;
-        }
-
-        $ID = $this->ID;
-        if (isset(self::$registeredLayoutFilters[$ID])) {
-            return;
-        }
-
-        self::$registeredLayoutFilters[$ID] = true;
-
-        add_filter('Modularity/Display/BeforeModule::classes', function ($classes, $args, $post_type, $current_ID) use ($data, $ID) {
-            if ($post_type === 'mod-shape-divider' && $current_ID === $ID) {
-                if (!empty($data['noBottomMargin'])) {
-                    $classes[] = 'no-bottom-margin';
-                }
-
-                if (!empty($data['noTopMargin'])) {
-                    $classes[] = 'no-top-margin';
-                }
-
-                if (!empty($data['noHeight'])) {
-                    $classes[] = 'no-height';
-                    $classes[] = ($data['overlap'] ?? '') === 'up' ? 'overlap-up' : 'overlap-down';
-                }
-
-                if (!empty($data['flipHorizontally'])) {
-                    $classes[] = 'flip-horizontally';
-                }
-
-                if (!empty($data['flipVertically'])) {
-                    $classes[] = 'flip-vertically';
-                }
-            }
-
-            return $classes;
-        }, 10, 4);
-    }
-
-    /**
-     * Replace fill, stroke and color attributes on the SVG.
-     *
-     * @param string $svg SVG markup.
-     * @param string $color Replacement color (currentColor or hex).
+     * @param mixed $attachmentId ACF svg_file attachment ID.
      * @return string
      */
-    private function replaceSvgColors($svg, $color) {
+    private function getSvgCodeFromRemoteFallback($attachmentId): string
+    {
+        $url = wp_get_attachment_url($attachmentId);
+        if (!$url) {
+            return '';
+        }
+
+        $response = wp_remote_get($url);
+        if (is_wp_error($response)) {
+            return '';
+        }
+
+        if ((int) wp_remote_retrieve_response_code($response) !== 200) {
+            return '';
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        return is_string($body) ? $body : '';
+    }
+
+    private function replaceSvgColors($svg, $color)
+    {
         if (!is_string($svg) || $svg === '' || !is_string($color) || $color === '') {
             return is_string($svg) ? $svg : '';
         }
