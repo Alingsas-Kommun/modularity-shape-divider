@@ -213,8 +213,8 @@ class ShapeDivider extends \Modularity\Module
     }
 
     /**
-     * TEMPORARY local-dev fallback: fetch SVG via attachment URL when the file is missing on disk.
-     * Remove this method and its call in getSvgCode() when local uploads are available.
+     * Fetch SVG markup by attachment URL when the file is not on disk.
+     * Local DDEV proxies uploads and serves them with a certificate wp_remote_get rejects.
      *
      * @param mixed $attachmentId ACF svg_file attachment ID.
      * @return string
@@ -226,7 +226,7 @@ class ShapeDivider extends \Modularity\Module
             return '';
         }
 
-        $response = wp_remote_get($url);
+        $response = wp_remote_get($url, $this->remoteSvgRequestArgs($url));
         if (is_wp_error($response)) {
             return '';
         }
@@ -237,6 +237,22 @@ class ShapeDivider extends \Modularity\Module
 
         $body = wp_remote_retrieve_body($response);
         return is_string($body) ? $body : '';
+    }
+
+    /**
+     * @param string $url Attachment URL.
+     * @return array<string, mixed>
+     */
+    private function remoteSvgRequestArgs(string $url): array
+    {
+        $args = ['timeout' => 15];
+        $host = wp_parse_url($url, PHP_URL_HOST);
+
+        if (is_string($host) && str_ends_with($host, '.ddev.site')) {
+            $args['sslverify'] = false;
+        }
+
+        return $args;
     }
 
     private function replaceSvgColors($svg, $color)
